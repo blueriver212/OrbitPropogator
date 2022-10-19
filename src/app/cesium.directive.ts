@@ -6,7 +6,8 @@ import * as csvParse from 'csv-parse';
 import satelliteData from '../../src/assets/json/SatelliteData.json'
 import { CatalogueKep } from './Catalogue';
 import { Satellite } from './Satellite';
-import charlesSatellites from '../../src/assets/json/CharlesSatellites.json'
+import czml_example from '../../src/assets/json/czml_example.json'
+import czmlSatellties from '../../src/assets/json/satellitesCZML.json'
 
 @Directive({
   selector: '[appCesium]'
@@ -24,27 +25,28 @@ export class CesiumDirective implements OnInit
   }
 
   ngOnInit(): void {
-    // create a catalogue and return a point collection
-    var importedSatellites:Array<Satellite> = this.catalogue.CreateCatalogue();
-    importedSatellites.forEach((item) => {
-      this.pointCollection.add({
-        position: Cesium.Cartesian3.fromDegrees(0.0, 0.0),
-        pixelSize: 3, 
-        color: Cesium.Color.YELLOW,
-      })
-    })
 
-    charlesSatellites.forEach((item) => {
-      this.pointCollection.add({
-        position : Cesium.Cartesian3.fromDegrees(item['ECI X (km)'], item['ECI Y (km)'], item['ECI Z (km)']*1000)
-      })
-    })
+    this.viewer.dataSources.add(
+      Cesium.CzmlDataSource.load(czml_example)
+    )
 
-     
 
-    this.viewer.scene.primitives.add(this.pointCollection); 
-    // Initialise Cesium Parts
-    //this.SetUpInitialCesiumConditions();
+
+    
+    // // create a catalogue and return a point collection
+    // var importedSatellites:Array<Satellite> = this.catalogue.CreateCatalogue();
+    // importedSatellites.forEach((item) => {
+    //   this.pointCollection.add({
+    //     position: Cesium.Cartesian3.fromDegrees(0.0, 0.0),
+    //     pixelSize: 3, 
+    //     color: Cesium.Color.YELLOW,
+    //   })
+    // })
+    
+
+    // this.viewer.scene.primitives.add(this.pointCollection); 
+    // // Initialise Cesium Parts
+    // this.SetUpInitialCesiumConditions();
   }
 
   private SetUpInitialCesiumConditions() {
